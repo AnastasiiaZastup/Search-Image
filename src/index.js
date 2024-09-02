@@ -1,30 +1,3 @@
-
-
-/*const selectors = {
-    form: document.querySelector('.search-form'),
-    gallery: document.querySelector('.gallery'),
-    button: document.querySelector('.load-more'),
-    input: document.querySelector('[name = "searchQuery"]')
-}
-
-selectors.form.addEventListener('submit', startSubmit);
-selectors.button.addEventListener('click', startClick);
-
-async function startSubmit(event) {
-    event.preventDefault();
-
-}
-
- const params = {
-      key: API_KEY,
-      q: selectors.input.value,
-      image_type: 'photo',
-      orientation: 'horizontal',
-      safesearch: true,
-      per_page: 40,
-};*/
-  
-
 import Notiflix from 'notiflix';
 import axios from 'axios';
 import SimpleLightbox from 'simplelightbox';
@@ -52,7 +25,9 @@ async function fetchData(params) {
     const response = await axios.get(BASE_URL, { params });
     return response.data;
   } catch (error) {
-    throw new Error('An error occurred while fetching data. Please try again later.');
+    throw new Error(
+      'An error occurred while fetching data. Please try again later.'
+    );
   }
 }
 
@@ -61,11 +36,14 @@ function updateGallery(data) {
 
   if (hits.length === 0) {
     selectors.gallery.innerHTML = '';
-    Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+    Notiflix.Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
   } else {
     selectors.gallery.innerHTML = createMarkup(hits);
 
-    selectors.button.style.display = totalHits > page * PER_PAGE ? 'block' : 'none';
+    selectors.button.style.display =
+      totalHits > page * PER_PAGE ? 'block' : 'none';
 
     if (totalHits > 0) {
       Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
@@ -105,7 +83,15 @@ async function onSubmit(event) {
 function createMarkup(images) {
   return images
     .map(
-      ({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => `
         <div class="photo-card">
           <a class="gallery-link" href="${largeImageURL}">
             <img src="${webformatURL}" alt="${tags}" loading="lazy" width="300" />
@@ -152,7 +138,8 @@ async function loadMoreImages() {
     } else {
       const newPhotosMarkup = createMarkup(data.hits);
       selectors.gallery.insertAdjacentHTML('beforeend', newPhotosMarkup);
-      selectors.button.style.display = data.totalHits > page * PER_PAGE ? 'block' : 'none';
+      selectors.button.style.display =
+        data.totalHits > page * PER_PAGE ? 'block' : 'none';
       Notiflix.Notify.info("You've reached the end of search results.");
       initializeLightbox();
     }
